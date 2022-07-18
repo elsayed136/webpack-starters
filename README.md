@@ -108,3 +108,136 @@ module.exports = {
   presets: ['@babel/preset-env'],
 }
 ```
+
+### 3. CSS-PostCSS-SASS-HMR
+
+```bash
+npm i -D style-loader css-loader
+npm i -D postcss postcss-preset-env postcss-loader
+npm i -D sass sass-loader
+```
+
+in `webpack.config.js` file
+
+add rule for styles
+
+```bash
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(s[ac]|c)ss$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            // This is required for asset imports in CSS, such as url()
+            options: { publicPath: '' },
+          },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'],
+      },
+    ],
+  },
+
+  plugins: [new MiniCssExtractPlugin()],
+};
+```
+
+create file `postcss.config.js` then add
+
+```bash
+# ./postcss.config.js
+module.exports = {
+  plugins: ['postcss-preset-env'],
+}
+```
+
+### 4. html-webpack-plugin
+
+```bash
+npm i -D html-webpack-plugin html-webpack-harddisk-plugin
+```
+
+NOTE: html-webpack-harddisk-plugin for hot reloading html template from html-webpack-plugin
+
+in `webpack.config.js` file
+
+add in src driectory html tamplete for HtmlWebpackPlugin
+
+```bash
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+
+module.exports = {
+  plugins: [
+    new MiniCssExtractPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      alwaysWriteToDisk: true,
+    }),
+    new HtmlWebpackHarddiskPlugin({
+      outputPath: path.resolve(__dirname, 'dist'),
+    }),
+  ]
+};
+```
+
+### 5. Assets/Images
+
+```bash
+npm i -D copy-webpack-plugin
+```
+
+NOTE: copy-webpack-plugins: Copies individual files or entire directories, which already exist, to the build directory.
+
+in `webpack.config.js` file
+
+add in src driectory html tamplete for HtmlWebpackPlugin
+
+```bash
+const CopyPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+   output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
+    clean: true,
+    // this places all images processed in an image folder
+    assetModuleFilename: 'assets/[name][ext][query]',
+  },
+  module: {
+    rules: [
+        {
+          test: /\.(png|jpe?g|gif|svg)$/i,
+
+          type: 'asset/resource',
+        },
+    ],
+  },
+
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/assets'),
+          to: path.resolve(__dirname, 'dist/assets'),
+        },
+      ],
+    }),
+  ]
+};
+```
+
+### 6. Browserslists
+
+in root dir add file `.browserslistrc`
+
+```bash
+# ./.browserslistrc
+last 2 versions
+> 0.5%
+IE 10
+```

@@ -1,0 +1,1 @@
+{"version":3,"file":"bundle.css","mappings":";;;AAAA;EACE;EACA;EACA;AACF,C","sources":["webpack://webpack-starters/./src/sass/main.scss"],"sourcesContent":["body {\r\n  margin: 0;\r\n  background-color: peachpuff;\r\n  color: #222;\r\n}\r\n"],"names":[],"sourceRoot":""}
